@@ -1,0 +1,67 @@
+{
+  "coques": [
+    {
+      "id": "c1",
+      "nom": "Coque silicone rose",
+      "photo": "images/coque-rose.svg",
+      "prix": 25,
+      "disponible": true,
+      "dateAjout": "2026-11-02",
+      "modele": "iPhone 13",
+      "couleur": "Rose",
+      "comments": [
+        {
+          "nom": "Amira",
+          "message": "Belle couleur et bonne prise en main.",
+          "note": 4
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "nom": "Coque silicone bleue",
+      "photo": "images/coque-bleue.svg",
+      "prix": 28,
+      "disponible": true,
+      "dateAjout": "2026-11-03",
+      "modele": "Samsung Galaxy A54",
+      "couleur": "Bleu",
+      "comments": []
+    },
+    {
+      "id": "c3",
+      "nom": "Coque noire",
+      "photo": "images/coque-noire.svg",
+      "prix": 30,
+      "disponible": false,
+      "dateAjout": "2026-11-04",
+      "modele": "iPhone 14",
+      "couleur": "Noir",
+      "comments": [
+        {
+          "nom": "Yassine",
+          "message": "Coque simple et pratique.",
+          "note": 5
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "nom": "Coque lavande",
+      "photo": "images/coque-lavande.svg",
+      "prix": 24.5,
+      "disponible": true,
+      "dateAjout": "2026-11-05",
+      "modele": "Samsung Galaxy A34",
+      "couleur": "Lavande",
+      "comments": []
+    }
+  ],
+  "administrateurs": [
+    {
+      "id": "admin1",
+      "login": "admin",
+      "motDePasse": "CaseZone2026!"
+    }
+  ]
+}

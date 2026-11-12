@@ -1,0 +1,17 @@
+﻿<article class="product-card">
+  <div class="product-visual">
+    <img class="product-image" [src]="coque().photo" [alt]="coque().nom" loading="lazy" width="320" height="250">
+    <span class="stock-badge" [class.unavailable]="!coque().disponible">
+      {{ coque().disponible | disponibilite }}
+    </span>
+  </div>
+  <div class="product-body">
+    <p class="product-model">{{ coque().modele }}</p>
+    <h3>{{ coque().nom }}</h3>
+    <p>{{ coque().couleur }} · {{ coque().comments.length }} avis</p>
+    <div class="product-footer">
+      <strong>{{ coque().prix | number:'1.2-2' }} DT</strong>
+      <a [routerLink]="['/coques', coque().id]" [attr.aria-label]="'Voir les détails de ' + coque().nom">Découvrir →</a>
+    </div>
+  </div>
+</article>

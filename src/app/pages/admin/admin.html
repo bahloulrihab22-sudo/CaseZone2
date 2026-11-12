@@ -1,0 +1,144 @@
+<header class="site-header">
+  <nav class="container site-nav" aria-label="Menu administrateur">
+    <a class="brand" routerLink="/admin">Case<span>Zone.</span></a>
+    <div class="nav-links">
+      <a class="active" routerLink="/admin">Admin</a>
+      <a routerLink="/coques">Retour au site</a>
+      @if (compte()) {
+        <button class="btn btn-outline-secondary" type="button" (click)="deconnecter()" [disabled]="attente()">Déconnexion</button>
+      }
+    </div>
+  </nav>
+</header>
+<main class="container">
+  <p class="eyebrow">Espace administrateur</p>
+  <h1 class="h2 mb-4">Gestion de la boutique</h1>
+  @if (erreur()) { <p class="alert alert-danger" role="alert">{{ erreur() }}</p> }
+  @if (message()) { <p class="alert alert-success" role="status">{{ message() }}</p> }
+  @if (attente()) { <p role="status">Opération en cours…</p> }
+
+  @if (!compte()) {
+    <section class="panel mx-auto" style="max-width: 520px">
+      <h2 class="h4 mb-4">Connexion</h2>
+      <form (submit)="connecter($event)" novalidate>
+        <fieldset [disabled]="attente()">
+          <label for="login" class="form-label">Login</label>
+<input id="login" type="text" class="form-control mb-3" [formField]="connexionForm.login" autocomplete="username">
+          <label for="connexion-mdp" class="form-label">Mot de passe</label>
+<input id="connexion-mdp" type="password" class="form-control mb-3" [formField]="connexionForm.motDePasse" autocomplete="current-password">
+          @if (connexionForm().dirty() && connexionForm().invalid()) {
+  <ul class="text-danger" role="alert">
+    @for (erreur of connexionForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
+  </ul>
+}
+          <button class="btn btn-primary" type="submit" [disabled]="connexionForm().invalid() || attente()">Se connecter</button>
+        </fieldset>
+      </form>
+    </section>
+  } @else {
+    <div class="row g-3 mb-4" aria-label="Tableau de bord">
+      <div class="col-sm-4"><div class="panel"><p>Total des coques</p><strong class="fs-2">{{ coques().length }}</strong></div></div>
+      <div class="col-sm-4"><div class="panel"><p>Disponibles</p><strong class="fs-2 text-success">{{ disponibles() }}</strong></div></div>
+      <div class="col-sm-4"><div class="panel"><p>Épuisées</p><strong class="fs-2 text-danger">{{ epuisees() }}</strong></div></div>
+    </div>
+
+    <section class="panel mb-4">
+      <div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
+        <h2 class="h4">Catalogue</h2>
+        <button class="btn btn-outline-secondary" type="button" (click)="charger()" [disabled]="attente()">Actualiser</button>
+      </div>
+      <label for="recherche-admin">Rechercher par nom</label>
+      <input #champ id="recherche-admin" class="form-control mb-3" type="search" [value]="recherche()" (input)="recherche.set(champ.value)">
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead><tr><th>Coque</th><th>Modèle</th><th>Prix</th><th>Disponibilité</th><th>Ajout</th><th>Actions</th></tr></thead>
+          <tbody>
+            @for (coque of coquesAffichees(); track coque.id) {
+              <tr>
+                <td><a [routerLink]="['/coques', coque.id]">{{ coque.nom }}</a></td>
+                <td>{{ coque.modele }}</td>
+                <td>{{ coque.prix | number:'1.2-2' }} DT</td>
+                <td [class]="coque.disponible ? 'text-success' : 'text-danger'">{{ coque.disponible | disponibilite }}</td>
+                <td>{{ coque.dateAjout | date:'dd/MM/yyyy' }}</td>
+                <td><div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary" type="button" (click)="choisir(coque)" [disabled]="attente()">Modifier</button>
+                  <button class="btn btn-sm btn-outline-danger" type="button" (click)="suppression.set(coque)" [disabled]="attente()">Supprimer</button>
+                </div></td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6">Aucune coque trouvée.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (suppression(); as coque) {
+        <div class="alert alert-warning" role="alert">
+          <p>Supprimer « {{ coque.nom }} » ? Cette action supprime aussi ses commentaires.</p>
+          <button class="btn btn-danger me-2" type="button" (click)="supprimer()" [disabled]="attente()">Confirmer la suppression</button>
+          <button class="btn btn-outline-secondary" type="button" (click)="suppression.set(undefined)" [disabled]="attente()">Annuler</button>
+        </div>
+      }
+    </section>
+
+    <div class="row g-4">
+      <section class="col-lg-7">
+        <div class="panel">
+          <h2 class="h4 mb-4">{{ selection() ? 'Modifier la coque sélectionnée' : 'Ajouter une coque' }}</h2>
+          @if (selection(); as coque) { <p>Identifiant : {{ coque.id }}</p> }
+          <form (submit)="enregistrer($event)" novalidate>
+            <fieldset [disabled]="attente()">
+              <label for="nom" class="form-label">Nom</label>
+<input id="nom" type="text" class="form-control mb-3" [formField]="produitForm.nom" >
+              <label for="photo" class="form-label">Photo : chemin local ou URL</label>
+<input id="photo" type="text" class="form-control mb-3" [formField]="produitForm.photo" >
+              <label for="prix" class="form-label">Prix (DT)</label>
+<input id="prix" type="number" class="form-control mb-3" [formField]="produitForm.prix" step="0.01">
+              <label for="modele" class="form-label">Modèle de smartphone</label>
+<input id="modele" type="text" class="form-control mb-3" [formField]="produitForm.modele" >
+              <label for="couleur" class="form-label">Couleur</label>
+<input id="couleur" type="text" class="form-control mb-3" [formField]="produitForm.couleur" >
+              <label for="date" class="form-label">Date d’ajout</label>
+<input id="date" type="date" class="form-control mb-3" [formField]="produitForm.dateAjout" >
+              <div class="form-check mb-3">
+                <input id="stock" class="form-check-input" type="checkbox" [formField]="produitForm.disponible">
+                <label class="form-check-label" for="stock">Disponible</label>
+              </div>
+              @if (produitForm().dirty() && produitForm().invalid()) {
+  <ul class="text-danger" role="alert">
+    @for (erreur of produitForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
+  </ul>
+}
+              <button class="btn btn-primary me-2" type="submit" [disabled]="produitForm().invalid() || attente()">
+                {{ selection() ? 'Enregistrer' : 'Ajouter' }}
+              </button>
+              @if (selection()) {
+                <button class="btn btn-outline-secondary" type="button" (click)="annuler()">Annuler la modification</button>
+              }
+            </fieldset>
+          </form>
+        </div>
+      </section>
+      <section class="col-lg-5">
+        <div class="panel">
+          <h2 class="h4 mb-4">Changer le mot de passe</h2>
+          <form (submit)="changerMotDePasse($event)" novalidate>
+            <fieldset [disabled]="attente()">
+              <label for="ancien" class="form-label">Ancien mot de passe</label>
+<input id="ancien" type="password" class="form-control mb-3" [formField]="motDePasseForm.ancien" autocomplete="current-password">
+              <label for="nouveau" class="form-label">Nouveau mot de passe</label>
+<input id="nouveau" type="password" class="form-control mb-3" [formField]="motDePasseForm.nouveau" autocomplete="new-password">
+              <label for="confirmation" class="form-label">Confirmer le nouveau mot de passe</label>
+<input id="confirmation" type="password" class="form-control mb-3" [formField]="motDePasseForm.confirmation" autocomplete="new-password">
+              @if (motDePasseForm().dirty() && motDePasseForm().invalid()) {
+  <ul class="text-danger" role="alert">
+    @for (erreur of motDePasseForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
+  </ul>
+}
+              <button class="btn btn-primary" type="submit" [disabled]="motDePasseForm().invalid() || attente()">Modifier le mot de passe</button>
+            </fieldset>
+          </form>
+        </div>
+      </section>
+    </div>
+  }
+</main>

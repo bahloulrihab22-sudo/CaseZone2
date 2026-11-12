@@ -1,0 +1,68 @@
+<a class="back-link" routerLink="/coques">← Retour aux coques</a>
+
+@if (chargement()) { <p role="status">Chargement…</p> }
+@if (erreur()) {
+  <div class="alert alert-danger" role="alert">{{ erreur() }}
+    @if (!coque()) { <button type="button" class="btn btn-outline-danger" (click)="charger()">Réessayer</button> }
+  </div>
+}
+@if (message()) { <p class="alert alert-success" role="status">{{ message() }}</p> }
+@if (coque(); as produit) {
+  <div class="row g-4 mb-5">
+    <div class="col-md-5">
+      <img class="detail-photo" [src]="produit.photo" [alt]="produit.nom">
+    </div>
+    <div class="col-md-7">
+      <div class="panel h-100">
+        <p class="eyebrow">{{ produit.modele }}</p>
+        <h1 class="h2">{{ produit.nom }}</h1>
+        <p class="price">{{ produit.prix | number:'1.2-2' }} DT</p>
+        <p [class]="produit.disponible ? 'text-success' : 'text-danger'">
+          {{ produit.disponible | disponibilite }}
+        </p>
+        <hr>
+        <p>Couleur : <strong>{{ produit.couleur }}</strong></p>
+        <p>Date d'ajout : {{ produit.dateAjout | date:'dd/MM/yyyy' }}</p>
+        <p class="text-secondary mb-0">Identifiant : {{ produit.id }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row g-4">
+    <section class="col-md-6">
+      <div class="panel h-100">
+  <h2 class="h4 mb-4">Les avis</h2>
+  <ul class="list-unstyled">
+    @for (commentaire of produit.comments; track $index) {
+      <li class="comment"><strong>{{ commentaire.nom }}</strong><span class="float-end">{{ commentaire.note }}/5</span><p class="mb-0 mt-2 text-secondary">{{ commentaire.message }}</p></li>
+    } @empty {
+      <li>Aucun commentaire.</li>
+    }
+  </ul>
+
+      </div>
+    </section>
+    <section class="col-md-6">
+      <div class="panel">
+        <h2 class="h4 mb-4">Votre avis compte</h2>
+  <form (submit)="ajouterCommentaire($event)" novalidate>
+    <fieldset [disabled]="envoi()">
+      <label for="nom-commentaire" class="form-label">Nom</label>
+<input id="nom-commentaire" type="text" class="form-control mb-3" [formField]="commentaireForm.nom" >
+      <label for="note" class="form-label">Note de 1 à 5</label>
+<input id="note" type="number" class="form-control mb-3" [formField]="commentaireForm.note" step="1">
+      <label for="message">Commentaire</label>
+      <textarea id="message" rows="3" class="form-control mb-3" [formField]="commentaireForm.message"></textarea>
+      @if (commentaireForm().dirty() && commentaireForm().invalid()) {
+  <ul class="text-danger" role="alert">
+    @for (erreur of commentaireForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
+  </ul>
+}
+      <button type="submit" class="btn btn-primary" [disabled]="commentaireForm().invalid() || envoi()">
+        {{ envoi() ? 'Enregistrement…' : 'Ajouter le commentaire' }}
+      </button>
+    </fieldset>
+  </form>
+      </div>
+    </section>
+  </div>
+}

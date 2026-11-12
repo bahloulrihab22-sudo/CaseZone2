@@ -1,0 +1,36 @@
+<section class="hero">
+  <p class="eyebrow">La collection CaseZone</p>
+  <h1>Une coque qui vous ressemble.</h1>
+  <p>Rose, bleu, noir ou lavande : trouvez la touche de couleur qui accompagne votre téléphone au quotidien.</p>
+</section>
+<h2 class="mb-4">Nos coques</h2>
+<section class="catalogue-tools" aria-label="Rechercher une coque">
+  <div class="search-field">
+    <label for="recherche">Nom de la coque</label>
+    <input #champRecherche id="recherche" type="search" class="form-control"
+      placeholder="Exemple : silicone" [value]="recherche()"
+      (input)="recherche.set(champRecherche.value)">
+  </div>
+  <label class="availability-filter" for="disponibles">
+    <input #disponibles id="disponibles" type="checkbox" [checked]="disponiblesSeulement()"
+      (change)="disponiblesSeulement.set(disponibles.checked)">
+    Disponibles uniquement
+  </label>
+</section>
+@if (chargement()) {
+  <p role="status">Chargement des coques…</p>
+} @else if (erreur()) {
+  <div class="alert alert-danger" role="alert">
+    {{ erreur() }}
+    <button type="button" class="btn btn-outline-danger ms-2" (click)="charger()">Réessayer</button>
+  </div>
+} @else {
+  <p class="text-secondary">{{ coquesAffichees().length }} coque(s) trouvée(s)</p>
+  <div class="row g-4">
+    @for (coque of coquesAffichees(); track coque.id) {
+      <div class="col-sm-6 col-lg-3"><app-coque-card [coque]="coque"></app-coque-card></div>
+    } @empty {
+      <p>Aucune coque ne correspond à votre recherche.</p>
+    }
+  </div>
+}
