@@ -20,17 +20,22 @@
   @if (!compte()) {
     <section class="panel mx-auto" style="max-width: 520px">
       <h2 class="h4 mb-4">Connexion</h2>
-      <form (submit)="connecter($event)" novalidate>
+      <form [formRoot]="connexionForm" (submit)="connecter()">
         <fieldset [disabled]="attente()">
           <label for="login" class="form-label">Login</label>
-<input id="login" type="text" class="form-control mb-3" [formField]="connexionForm.login" autocomplete="username">
+          <input id="login" type="text" class="form-control mb-3" [formField]="connexionForm.login" autocomplete="username">
+          @if (connexionForm.login().invalid() && connexionForm.login().touched()) {
+            @for (erreur of connexionForm.login().errors(); track $index) {
+              <p class="text-danger" role="alert">{{ erreur.message }}</p>
+            }
+          }
           <label for="connexion-mdp" class="form-label">Mot de passe</label>
-<input id="connexion-mdp" type="password" class="form-control mb-3" [formField]="connexionForm.motDePasse" autocomplete="current-password">
-          @if (connexionForm().dirty() && connexionForm().invalid()) {
-  <ul class="text-danger" role="alert">
-    @for (erreur of connexionForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
-  </ul>
-}
+          <input id="connexion-mdp" type="password" class="form-control mb-3" [formField]="connexionForm.motDePasse" autocomplete="current-password">
+          @if (connexionForm.motDePasse().invalid() && connexionForm.motDePasse().touched()) {
+            @for (erreur of connexionForm.motDePasse().errors(); track $index) {
+              <p class="text-danger" role="alert">{{ erreur.message }}</p>
+            }
+          }
           <button class="btn btn-primary" type="submit" [disabled]="connexionForm().invalid() || attente()">Se connecter</button>
         </fieldset>
       </form>
@@ -85,29 +90,54 @@
         <div class="panel">
           <h2 class="h4 mb-4">{{ selection() ? 'Modifier la coque sélectionnée' : 'Ajouter une coque' }}</h2>
           @if (selection(); as coque) { <p>Identifiant : {{ coque.id }}</p> }
-          <form (submit)="enregistrer($event)" novalidate>
+          <form [formRoot]="produitForm" (submit)="enregistrer()">
             <fieldset [disabled]="attente()">
               <label for="nom" class="form-label">Nom</label>
-<input id="nom" type="text" class="form-control mb-3" [formField]="produitForm.nom" >
+              <input id="nom" type="text" class="form-control mb-3" [formField]="produitForm.nom">
+              @if (produitForm.nom().invalid() && produitForm.nom().touched()) {
+                @for (erreur of produitForm.nom().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <label for="photo" class="form-label">Photo : chemin local ou URL</label>
-<input id="photo" type="text" class="form-control mb-3" [formField]="produitForm.photo" >
+              <input id="photo" type="text" class="form-control mb-3" [formField]="produitForm.photo">
+              @if (produitForm.photo().invalid() && produitForm.photo().touched()) {
+                @for (erreur of produitForm.photo().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <label for="prix" class="form-label">Prix (DT)</label>
-<input id="prix" type="number" class="form-control mb-3" [formField]="produitForm.prix" step="0.01">
+              <input id="prix" type="number" class="form-control mb-3" [formField]="produitForm.prix" step="0.01">
+              @if (produitForm.prix().invalid() && produitForm.prix().touched()) {
+                @for (erreur of produitForm.prix().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <label for="modele" class="form-label">Modèle de smartphone</label>
-<input id="modele" type="text" class="form-control mb-3" [formField]="produitForm.modele" >
+              <input id="modele" type="text" class="form-control mb-3" [formField]="produitForm.modele">
+              @if (produitForm.modele().invalid() && produitForm.modele().touched()) {
+                @for (erreur of produitForm.modele().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <label for="couleur" class="form-label">Couleur</label>
-<input id="couleur" type="text" class="form-control mb-3" [formField]="produitForm.couleur" >
+              <input id="couleur" type="text" class="form-control mb-3" [formField]="produitForm.couleur">
+              @if (produitForm.couleur().invalid() && produitForm.couleur().touched()) {
+                @for (erreur of produitForm.couleur().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <label for="date" class="form-label">Date d’ajout</label>
-<input id="date" type="date" class="form-control mb-3" [formField]="produitForm.dateAjout" >
+              <input id="date" type="date" class="form-control mb-3" [formField]="produitForm.dateAjout">
+              @if (produitForm.dateAjout().invalid() && produitForm.dateAjout().touched()) {
+                @for (erreur of produitForm.dateAjout().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <div class="form-check mb-3">
                 <input id="stock" class="form-check-input" type="checkbox" [formField]="produitForm.disponible">
                 <label class="form-check-label" for="stock">Disponible</label>
               </div>
-              @if (produitForm().dirty() && produitForm().invalid()) {
-  <ul class="text-danger" role="alert">
-    @for (erreur of produitForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
-  </ul>
-}
               <button class="btn btn-primary me-2" type="submit" [disabled]="produitForm().invalid() || attente()">
                 {{ selection() ? 'Enregistrer' : 'Ajouter' }}
               </button>
@@ -121,19 +151,27 @@
       <section class="col-lg-5">
         <div class="panel">
           <h2 class="h4 mb-4">Changer le mot de passe</h2>
-          <form (submit)="changerMotDePasse($event)" novalidate>
+          <form [formRoot]="motDePasseForm" (submit)="changerMotDePasse()">
             <fieldset [disabled]="attente()">
               <label for="ancien" class="form-label">Ancien mot de passe</label>
-<input id="ancien" type="password" class="form-control mb-3" [formField]="motDePasseForm.ancien" autocomplete="current-password">
-              <label for="nouveau" class="form-label">Nouveau mot de passe</label>
-<input id="nouveau" type="password" class="form-control mb-3" [formField]="motDePasseForm.nouveau" autocomplete="new-password">
+              <input id="ancien" type="password" class="form-control mb-3" [formField]="motDePasseForm.ancien" autocomplete="current-password">
+              @if (motDePasseForm.ancien().invalid() && motDePasseForm.ancien().touched()) {
+                @for (erreur of motDePasseForm.ancien().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }}
+                <label for="nouveau" class="form-label">Nouveau mot de passe</label>
+              <input id="nouveau" type="password" class="form-control mb-3" [formField]="motDePasseForm.nouveau" autocomplete="new-password">
+              @if (motDePasseForm.nouveau().invalid() && motDePasseForm.nouveau().touched()) {
+                @for (erreur of motDePasseForm.nouveau().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }}
               <label for="confirmation" class="form-label">Confirmer le nouveau mot de passe</label>
-<input id="confirmation" type="password" class="form-control mb-3" [formField]="motDePasseForm.confirmation" autocomplete="new-password">
-              @if (motDePasseForm().dirty() && motDePasseForm().invalid()) {
-  <ul class="text-danger" role="alert">
-    @for (erreur of motDePasseForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
-  </ul>
-}
+              <input id="confirmation" type="password" class="form-control mb-3" [formField]="motDePasseForm.confirmation" autocomplete="new-password">
+              @if (motDePasseForm.confirmation().invalid() && motDePasseForm.confirmation().touched()) {
+                @for (erreur of motDePasseForm.confirmation().errors(); track $index) {
+                  <p class="text-danger" role="alert">{{ erreur.message }}</p>
+                }
+              }
               <button class="btn btn-primary" type="submit" [disabled]="motDePasseForm().invalid() || attente()">Modifier le mot de passe</button>
             </fieldset>
           </form>

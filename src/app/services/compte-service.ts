@@ -2,8 +2,9 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { CompteAdministrateur } from '../models/modeles';
+import { environment } from '../../environments/environment';
 
-const URL = '/api/administrateurs';
+const URL = environment.apiUrl + '/administrateurs';
 
 @Injectable({ providedIn: 'root' })
 export class CompteService {

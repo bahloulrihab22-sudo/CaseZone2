@@ -3,7 +3,7 @@
     {
       "id": "c1",
       "nom": "Coque silicone rose",
-      "photo": "images/coque-rose.svg",
+      "photo": "images/coque-rose.png",
       "prix": 25,
       "disponible": true,
       "dateAjout": "2026-11-02",
@@ -14,24 +14,45 @@
           "nom": "Amira",
           "message": "Belle couleur et bonne prise en main.",
           "note": 4
+        },
+        {
+          "nom": "wissal",
+          "message": "good",
+          "note": 5
+        },
+        {
+          "nom": "rihab",
+          "message": "mauvaise couleur ;",
+          "note": 1
+        },
+        {
+          "nom": "rihab",
+          "message": "mauvaise couleur",
+          "note": 1
         }
       ]
     },
     {
       "id": "c2",
       "nom": "Coque silicone bleue",
-      "photo": "images/coque-bleue.svg",
+      "photo": "images/coque-bleue.png",
       "prix": 28,
       "disponible": true,
       "dateAjout": "2026-11-03",
       "modele": "Samsung Galaxy A54",
       "couleur": "Bleu",
-      "comments": []
+      "comments": [
+        {
+          "nom": "wissal",
+          "message": "po&,&",
+          "note": 5
+        }
+      ]
     },
     {
       "id": "c3",
       "nom": "Coque noire",
-      "photo": "images/coque-noire.svg",
+      "photo": "images/coque-noire.png",
       "prix": 30,
       "disponible": false,
       "dateAjout": "2026-11-04",
@@ -48,7 +69,7 @@
     {
       "id": "c4",
       "nom": "Coque lavande",
-      "photo": "images/coque-lavande.svg",
+      "photo": "images/coque-lavande.png",
       "prix": 24.5,
       "disponible": true,
       "dateAjout": "2026-11-05",
@@ -63,5 +84,6 @@
       "login": "admin",
       "motDePasse": "CaseZone2026!"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

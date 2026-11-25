@@ -10,10 +10,10 @@ import { Component } from '@angular/core';
     </section>
     <section class="panel">
       <p class="eyebrow">Le projet</p>
-      <h2 class="mb-4">Une boutique imaginée par Rihab.</h2>
-      <p>Auteure : <strong>Rihab Bahloul</strong></p>
+      <h2 class="mb-4">Une boutique imaginée par Rihab et Wissal.</h2>
+      <p>Auteures : <strong>Rihab Bahloul et Wissal Barhoumi</strong></p>
       <p>Classe : DSI 21 — Groupe 1</p>
-      <p class="mb-0">Email : bahloulrihab22@gmail.com</p>
+      <p class="mb-0">Email : bahloulrihab22@gmail.com , barhoumiwissal8@gmail.com</p>
     </section>
   `
 })

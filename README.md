@@ -1,6 +1,6 @@
 # CaseZone — Mini-projet Angular
 
-Rihab Bahloul — DSI 21 — Groupe 1.
+Rihab Bahloul et Wissal Barhoumi — DSI 21 — Groupe 1.
 
 ## Démarrer
 
@@ -50,7 +50,7 @@ Les données sont des exemples fictifs. Les images sont des illustrations locale
 | 2.1 Liste partielle | Cartes de coques dans un composant enfant |
 | 2.2 Détail complet | Route `/coques/:id`, tous les champs et commentaires |
 | 2.3 Deux critères combinables | Nom et disponibilité, ensemble ou séparément |
-| 2.4 Informations statiques | Page `/infos` et auteure du projet |
+| 2.4 Informations statiques | Page `/infos` et auteures du projet |
 | 2.5 Fonctionnalité de la fiche | Ajouter une note et un commentaire persistants |
 
 Le tri supplémentaire et la normalisation des accents ont été retirés afin de
@@ -67,13 +67,18 @@ garder la recherche simple et centrée sur l'énoncé.
 - `RouterLink`, `RouterLinkActive`, `RouterOutlet`, routes enfants et paramétrées.
 - `HttpClient`, `Observable`, `subscribe`, `tap`, GET/POST/PUT/DELETE.
 - Bootstrap pour la présentation.
-- Signal forms avec validation : `form`, `FormField`, `required`, `min`,
-  `max`, `minLength`, `maxLength`, `pattern` et `validate`.
+- Signal Forms : `form`, `FormRoot`, `FormField`, `required`, `min`,
+  `max`, `minLength`, `maxLength` et `pattern`.
 
-Les signal forms sont imposés par l'énoncé mais absents des PDF fournis.
-La documentation officielle Angular a été utilisée avec ton autorisation :
-https://angular.dev/guide/forms/signals/overview
-https://angular.dev/guide/forms/signals/validation
+Les formulaires suivent le cours 14 : `[formRoot]`, `[formField]`,
+`touched()` et `errors()` sous chaque champ. Les modèles sont remis à zéro
+avec `set()`. La confirmation du mot de passe est vérifiée avec un `if`
+lors de la soumission. Les contrôles de prix fini et de date restent dans
+la méthode d'enregistrement.
+
+Le signal `attente` bloque les doubles envois pendant les requêtes HTTP.
+Les services conservent la structure du cours 13 : HttpClient, Observable,
+pipe, tap, puis subscribe dans le composant.
 
 Angular est passé de 20 à 21.2 pour cette fonctionnalité.
 Le cours écrit `@Service` ; Angular utilise `@Injectable`.
@@ -87,7 +92,13 @@ Le cours écrit `@Service` ; Angular utilise `@Injectable`.
 - `src/app/services/compte-service.ts` : connexion et mot de passe.
 - `src/app/pipes/disponibilite-pipe.ts` : libellé de disponibilité.
 - `bd.json` : base unique, coques et administrateurs.
-- `proxy.conf.json` : redirection locale de `/api` vers JSON Server sur le port 3000.
+- `src/environments/environment.development.ts` : `production: false` et `apiUrl` pour `ng serve`.
+- `src/environments/environment.ts` : `production: true` et `apiUrl` pour le build de production.
+
+Comme dans le TP9, `apiUrl` vaut `http://localhost:3000` dans les deux fichiers.
+Les services importent `environment.ts` ; la configuration `development` dans
+`angular.json` le remplace par `environment.development.ts` lors de la compilation.
+Ils appellent directement `/coques` et `/administrateurs` sur ce serveur.
 
 JSON ne stocke pas directement les objets Date : les dates sont sérialisées,
 puis reconverties avec `new Date` à la lecture.
@@ -130,9 +141,9 @@ inventé dans ce projet.
 
 Le build se trouve dans `dist/casezone/browser`. L'hébergement doit :
 - servir ces fichiers et renvoyer `index.html` pour les routes Angular ;
-- faire suivre `/api/*` vers JSON Server en retirant le préfixe `/api` ;
 - conserver `bd.json` sur un stockage persistant et accessible en écriture.
 
-Le proxy Angular ne fonctionne qu'avec `ng serve`. Un dépôt GitHub ou un
-hébergement statique seul ne fait pas fonctionner le serveur JSON.
+Avant un déploiement distant, remplacer `apiUrl` dans `src/environments/environment.ts`
+par l'adresse de la vraie API, puis reconstruire l'application avec `npm run build`.
+Un dépôt GitHub ou un hébergement statique seul ne fait pas fonctionner le serveur JSON.
 Ces deux exigences restent à finaliser avec le dépôt et l'hébergement choisis.

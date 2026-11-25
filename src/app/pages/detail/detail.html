@@ -44,19 +44,29 @@
     <section class="col-md-6">
       <div class="panel">
         <h2 class="h4 mb-4">Votre avis compte</h2>
-  <form (submit)="ajouterCommentaire($event)" novalidate>
+  <form [formRoot]="commentaireForm" (submit)="ajouterCommentaire()">
     <fieldset [disabled]="envoi()">
       <label for="nom-commentaire" class="form-label">Nom</label>
-<input id="nom-commentaire" type="text" class="form-control mb-3" [formField]="commentaireForm.nom" >
+      <input id="nom-commentaire" type="text" class="form-control mb-3" [formField]="commentaireForm.nom">
+      @if (commentaireForm.nom().invalid() && commentaireForm.nom().touched()) {
+        @for (erreur of commentaireForm.nom().errors(); track $index) {
+          <p class="text-danger" role="alert">{{ erreur.message }}</p>
+        }
+      }
       <label for="note" class="form-label">Note de 1 à 5</label>
-<input id="note" type="number" class="form-control mb-3" [formField]="commentaireForm.note" step="1">
+      <input id="note" type="number" class="form-control mb-3" [formField]="commentaireForm.note" step="1">
+      @if (commentaireForm.note().invalid() && commentaireForm.note().touched()) {
+        @for (erreur of commentaireForm.note().errors(); track $index) {
+          <p class="text-danger" role="alert">{{ erreur.message }}</p>
+        }
+      }
       <label for="message">Commentaire</label>
       <textarea id="message" rows="3" class="form-control mb-3" [formField]="commentaireForm.message"></textarea>
-      @if (commentaireForm().dirty() && commentaireForm().invalid()) {
-  <ul class="text-danger" role="alert">
-    @for (erreur of commentaireForm().errorSummary(); track $index) { <li>{{ erreur.message }}</li> }
-  </ul>
-}
+      @if (commentaireForm.message().invalid() && commentaireForm.message().touched()) {
+        @for (erreur of commentaireForm.message().errors(); track $index) {
+          <p class="text-danger" role="alert">{{ erreur.message }}</p>
+        }
+      }
       <button type="submit" class="btn btn-primary" [disabled]="commentaireForm().invalid() || envoi()">
         {{ envoi() ? 'Enregistrement…' : 'Ajouter le commentaire' }}
       </button>
